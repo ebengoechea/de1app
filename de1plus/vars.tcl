@@ -1,8 +1,13 @@
 # de1 internal state live variables
-package provide de1_vars 1.0
+package provide de1_vars 1.2
 
+package require lambda
+
+package require de1_device_scale 1.0
+package require de1_event 1.0
 package require de1_logging 1.0
 package require de1_profile 2.0
+
 
 #############################
 # raw data from the DE1
@@ -315,39 +320,27 @@ proc stop_timer_flush_pour {} {
 }
 
 proc stop_espresso_timers {} {
+	if {$::timer_running != 1} {
+		return
+	}
 	#msg "stop_timers"
 	set ::timer_running 0
 	set ::timers(espresso_stop) [clock milliseconds]
 
 	scale_timer_stop
-	#stop_timer_preinfusion
-	#stop_timer_pour
-	#set ::substate_timers(stop) [clock milliseconds]
 }
 
 proc start_espresso_timers {} {
-	#msg "stop_timers"
-	#clear_timers
-	#zz5
 	set ::timer_running 1
 	set ::timers(espresso_start) [clock milliseconds]
 
 	scale_timer_start
-	#set ::timers(millistart) [clock milliseconds]
-	#set ::substate_timers(millistart) [clock milliseconds]
 }
 
 proc clear_espresso_timers {} {
-	#msg "clear_timers"
-	#global start_timer
-	#global start_millitimer
-	#set ::start_timer [clock seconds]
-	#set ::start_millitimer [clock milliseconds]
-	#set now [clock seconds]
-#zz1
+
 	unset -nocomplain ::timers
 	set ::timers(espresso_start) 0
-	#set ::timers(millistart) 0
 	set ::timers(espresso_stop) 0
 
 	unset -nocomplain ::substate_timers
@@ -363,10 +356,8 @@ proc clear_espresso_timers {} {
 	set ::timer_running 0
 
 	catch {
-		scale_timer_off
+		scale_timer_reset
 	}
-
-	#puts "clearing timers"
 }
 
 clear_espresso_timers
@@ -384,10 +375,17 @@ proc espresso_timer {} {
 	return [expr {([clock milliseconds] - $::timers(espresso_start) )/1000}]
 }
 
-proc espresso_millitimer {} {
-	return [expr {([clock milliseconds] - $::timers(espresso_start))}]
-	#global start_millitimer
-	#return [expr {[clock milliseconds] - $start_millitimer}]
+proc espresso_millitimer {{time_reference 0}} {
+
+	# Accept seconds or ms, always returns ms; 10000000000 is Sat Nov 20 09:46:40 PST 2286
+
+	if { $time_reference == 0 } {
+		set time_reference [clock milliseconds]
+	} elseif { $time_reference < 10000000000 } {
+		set time_reference [expr { $time_reference * 1000. }]
+	}
+
+	return [expr { $time_reference - $::timers(espresso_start) }]
 }
 
 proc espresso_elapsed_timer {} {
@@ -462,7 +460,17 @@ proc steam_pour_timer {} {
 	}
 }
 
-proc steam_pour_millitimer {} {
+proc steam_pour_millitimer {{time_reference 0}} {
+
+	# Accept seconds or ms, always returns ms; 10000000000 is Sat Nov 20 09:46:40 PST 2286
+
+	if { $time_reference == 0 } {
+		set time_reference [clock milliseconds]
+	} elseif { $time_reference < 10000000000 } {
+		set time_reference [expr { $time_reference * 1000. }]
+	}
+
+
 	if {[info exists ::timers(steam_pour_start)] != 1} {
 		return 0
 	}
@@ -471,10 +479,10 @@ proc steam_pour_millitimer {} {
 		return 0
 	} elseif {$::timers(steam_pour_stop) == 0} {
 		# no stop, so show current elapsed time
-		return [expr {([clock milliseconds] - $::timers(steam_pour_start))/1}]
+		return [expr {$time_reference - $::timers(steam_pour_start)}]
 	} else {
 		# stop occured, so show that.
-		return [expr {($::timers(steam_pour_stop) - $::timers(steam_pour_start))/1}]
+		return [expr {$::timers(steam_pour_stop) - $::timers(steam_pour_start)}]
 	}
 }
 
@@ -1103,6 +1111,19 @@ proc finalwaterweight_text {} {
 	return [return_weight_measurement $::de1(final_water_weight)]
 }
 
+# drink_weight is present for both espresso and hot water
+proc drink_weight_text {} {
+	if {$::de1(scale_weight) == "" || [ifexists ::settings(scale_bluetooth_address)] == ""} {
+		return ""
+	}
+
+	if {[ifexists ::blink_water_weight] == 1} {
+		return ""
+	}
+
+	return [return_weight_measurement $::settings(drink_weight)]
+}
+
 proc dump_stack {a b c} {
 	msg ---
 	msg [stacktrace]
@@ -1212,7 +1233,7 @@ proc diff_pressure {} {
 		return [expr {3 - (rand() * 6)}]
 	}
 
-	return $::de1(pressure_delta)
+	return $::gui::state::_delta_pressure
 }
 
 proc diff_flow_rate {} {
@@ -1220,7 +1241,7 @@ proc diff_flow_rate {} {
 		return [expr {3 - (rand() * 6)}]
 	}
 
-	return $::de1(flow_delta)
+	return $::gui::state::_delta_flow
 }
 
 proc diff_flow_rate_text {} {
@@ -2795,6 +2816,12 @@ proc load_settings_vars {fn} {
 		set temp_settings(final_desired_shot_volume) [ifexists temp_settings(final_desired_shot_weight)]
 	}
 
+	# properly reset beverage_type if not provided in the profile, o/w the beverage_type of the last profile with it
+	#	defined will be persisted throughout all subsequent shots.
+	if { ![info exists temp_settings(beverage_type)] } {
+		set temp_settings(beverage_type) {}
+	}
+		
 	if {[ifexists ::temp_settings(black_screen_saver)] == 1} {
 		# we've moved the "black screen saver" feature from its own dedicated variable to now be a setting of "0 minutes" on the screen saver change timer
 		# this line is simply for backward compatiblity, moving the old setting to a new one
@@ -2903,7 +2930,15 @@ proc save_espresso_rating_to_history {} {
 
 
 # Lazy way of decoupling from "package require" ordering.
-after idle {after 0 {register_state_change_handler Espresso Idle save_this_espresso_to_history}}
+# after idle {after 0 {register_state_change_handler Espresso Idle save_this_espresso_to_history}}
+
+::de1::event::listener::after_flow_complete_add \
+	[lambda {event_dict} {
+		save_this_espresso_to_history \
+			[dict get $event_dict previous_state] \
+			[dict get $event_dict this_state] \
+		} ]
+
 
 proc format_espresso_for_history {} {
 
@@ -2913,7 +2948,7 @@ proc format_espresso_for_history {} {
 			msg "This espresso's start time was not recorded. Possibly we didn't get the bluetooth message of state change to espresso."
 			set ::settings(espresso_clock) [clock seconds]
 		}
-		
+
 		set clock $::settings(espresso_clock)
 		set name [clock format $clock]
 
@@ -2943,10 +2978,13 @@ proc format_espresso_for_history {} {
 
 		append espresso_data "espresso_state_change {[espresso_state_change range 0 end]}\n"
 
+		catch { ::device::scale::format_for_history espresso_data }
+
 		append espresso_data "espresso_pressure_goal {[espresso_pressure_goal range 0 end]}\n"
 		append espresso_data "espresso_flow_goal {[espresso_flow_goal range 0 end]}\n"
 		append espresso_data "espresso_temperature_goal {[espresso_temperature_goal range 0 end]}\n"
 
+		catch { format_timers_for_history espresso_data }
 
 		# format settings nicely so that it is easier to read and parse
 		append espresso_data "settings {\n"
@@ -2971,7 +3009,15 @@ proc format_espresso_for_history {} {
 		append espresso_data "profile [huddle jsondump $::profile::current]"
 
 		return $espresso_data
-	
+
+}
+
+proc format_timers_for_history {espresso_data_name} {
+
+	upvar $espresso_data_name espresso_data
+	foreach {name reftime} [array get ::timers] {
+		append espresso_data "timers(${name}) ${reftime}\n"
+	}
 }
 
 proc format_espresso_to_json {} {
@@ -3435,7 +3481,7 @@ proc de1_version_string {} {
 		after 5000 [list info_page "[translate {Your DE1 firmware has been upgraded}]\n\n$version" [translate "Ok"]]
 	}
 	
-	array set modelarr [list 0 [translate "unknown"] 1 DE1 2 DE1+ 3 DE1PRO 4 DE1XL 5 DE1CAFE]
+	array set modelarr [list 0 [translate "unknown"] 1 DE1 2 DE1+ 3 DE1PRO 4 DE1XL 5 DE1CAFE 6 DE1XXL 7 DE1XXXL]
 
 	set brev ""
 	if {[ifexists ::settings(cpu_board_model)] != ""} {
@@ -3753,7 +3799,7 @@ proc range_check_shot_variables {} {
 	range_check_variable ::settings(final_desired_shot_volume) 0 2000
 	range_check_variable ::settings(final_desired_shot_volume_advanced) 0 2000
 	range_check_variable ::settings(final_desired_shot_volume_advanced_count_start) 0 20
-	range_check_variable ::settings(tank_desired_water_temperature) 0 60
+	range_check_variable ::settings(tank_desired_water_temperature) 0 45
 
 
 
@@ -3798,3 +3844,16 @@ proc when_to_start_pour_tracking_advanced {} {
 		return [translate "Immediately"]
 	}
 }
+
+proc app_updates_policy_as_text {} {
+	set progname "stable"
+    if {[ifexists ::settings(app_updates_beta_enabled)] == 1} {
+        set progname "beta"
+    } elseif {[ifexists ::settings(app_updates_beta_enabled)] == 2} {
+        set progname "nightly"
+    }
+
+ 	return [translate $progname]
+}
+
+
