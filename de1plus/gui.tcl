@@ -2086,10 +2086,15 @@ proc ui_startup {} {
 	
 	setup_images_for_first_page
 	setup_images_for_other_pages
+	
 	plugins init
+
+	### EB STARTUP DUI PAGES ###
+	dui setup_ui
+	###
+
 	.can itemconfigure splash -state hidden
-
-
+	
 	#after $::settings(timer_interval) 
 	update_onscreen_variables
 	delay_screen_saver
