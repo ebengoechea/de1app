@@ -615,6 +615,7 @@ proc make_de1_dir {srcdir destdirs} {
         saver/2560x1600/rainbow_dj.jpg *     
 
         profiles/adaptive_allonge.tcl *
+        profiles/flow_calibration.tcl *
         profiles/7g\ basket.tcl *
         profiles/cleaning_forward_flush.tcl *
         profiles/adaptive_espresso.tcl *
@@ -668,6 +669,8 @@ proc make_de1_dir {srcdir destdirs} {
         profiles/v60-22g.tcl *
 
         plugins/visualizer_upload/plugin.tcl *
+
+        plugins/log_upload/plugin.tcl *
 
         plugins/SDB/SDB.tcl *
         plugins/SDB/plugin.tcl *

@@ -196,11 +196,6 @@ namespace eval ::plugins::${plugin_name} {
             set settings(last_upload_result) [translate "Not uploaded: auto-upload is not enabled"]
             save_plugin_settings visualizer_upload
             return
-        }	
-        if { $::settings(history_saved) != 1 } {
-            set settings(last_upload_result) [translate "Not uploaded: shot was not saved to history"]
-            save_plugin_settings visualizer_upload
-            return
         }
         if {[espresso_elapsed length] < 6 && [espresso_pressure length] < 6 } {
             set settings(last_upload_result) [translate "Not uploaded: shot was too short"]
@@ -240,7 +235,12 @@ namespace eval ::plugins::${plugin_name} {
     }
     
     proc main {} {
-        register_state_change_handler Espresso Idle ::plugins::visualizer_upload::async_dispatch
+        ::de1::event::listener::after_flow_complete_add \
+            [lambda {event_dict} {
+            ::plugins::visualizer_upload::async_dispatch \
+                [dict get $event_dict previous_state] \
+                [dict get $event_dict this_state] \
+            } ]
     }
 
 }
