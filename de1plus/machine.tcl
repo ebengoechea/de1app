@@ -438,6 +438,7 @@ array set ::settings {
 	maximum_flow_range_advanced 0.6
 	maximum_pressure_range_advanced 0.6
 	high_vibration_scale_filtering False
+	last_version "1.34"
 }
 
 # default de1plus skin
@@ -483,6 +484,7 @@ array set ::de1_state {
     Clean \x12
     InBootLoader \x13
     AirPurge \x14
+	SchedIdle \x15
 }
 
 
