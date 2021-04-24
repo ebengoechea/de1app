@@ -136,9 +136,9 @@ proc make_de1_dir {srcdir destdirs} {
         history_export.tcl *
         version.tcl *
         profile.tcl *
-	de1_de1.tcl *
-	device_scale.tcl *
-	event.tcl *
+        de1_de1.tcl *
+        device_scale.tcl *
+        event.tcl *
 
         profiles_v2/readme.txt *
 
@@ -253,14 +253,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Antibes/1280x800/icon.jpg *
         skins/Antibes/1280x800/nothing_on.png *
         skins/Antibes/1280x800/steam_on.png *
-        skins/Antibes/1280x800/tea_on.png *    
+        skins/Antibes/1280x800/tea_on.png *
         skins/Antibes/2560x1600/espresso_on.png *
         skins/Antibes/2560x1600/icon.jpg *
         skins/Antibes/2560x1600/nothing_on.png *
         skins/Antibes/2560x1600/steam_on.png *
-        skins/Antibes/2560x1600/tea_on.png *    
-
-
+        skins/Antibes/2560x1600/tea_on.png *
 
         skins/SWDark4/screen_saver/2560x1600/saver-1.jpg *
         skins/SWDark4/screen_saver/2560x1600/saver-2.jpg *
@@ -310,12 +308,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Borg/1280x800/icon.jpg *
         skins/Borg/1280x800/nothing_on.png *
         skins/Borg/1280x800/steam_on.png *
-        skins/Borg/1280x800/tea_on.png *    
+        skins/Borg/1280x800/tea_on.png *
         skins/Borg/2560x1600/espresso_on.png *
         skins/Borg/2560x1600/icon.jpg *
         skins/Borg/2560x1600/nothing_on.png *
         skins/Borg/2560x1600/steam_on.png *
-        skins/Borg/2560x1600/tea_on.png *    
+        skins/Borg/2560x1600/tea_on.png *
 
         skins/Aztec/skin.tcl *
         skins/Aztec/aztec.ttf *
@@ -323,12 +321,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Aztec/1280x800/icon.jpg *
         skins/Aztec/1280x800/nothing_on.png *
         skins/Aztec/1280x800/steam_on.png *
-        skins/Aztec/1280x800/tea_on.png *    
+        skins/Aztec/1280x800/tea_on.png *
         skins/Aztec/2560x1600/espresso_on.png *
         skins/Aztec/2560x1600/icon.jpg *
         skins/Aztec/2560x1600/nothing_on.png *
         skins/Aztec/2560x1600/steam_on.png *
-        skins/Aztec/2560x1600/tea_on.png *    
+        skins/Aztec/2560x1600/tea_on.png *
 
         skins/Constructivism/skin.tcl *
         skins/Constructivism/orbitron.ttf *
@@ -336,12 +334,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Constructivism/1280x800/icon.jpg *
         skins/Constructivism/1280x800/nothing_on.png *
         skins/Constructivism/1280x800/steam_on.png *
-        skins/Constructivism/1280x800/tea_on.png *    
+        skins/Constructivism/1280x800/tea_on.png *
         skins/Constructivism/2560x1600/espresso_on.png *
         skins/Constructivism/2560x1600/icon.jpg *
         skins/Constructivism/2560x1600/nothing_on.png *
         skins/Constructivism/2560x1600/steam_on.png *
-        skins/Constructivism/2560x1600/tea_on.png *    
+        skins/Constructivism/2560x1600/tea_on.png *
 
         skins/Roman\ Gods/skin.tcl *
         skins/Roman\ Gods/renaissance.ttf *
@@ -349,12 +347,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Roman\ Gods/1280x800/icon.jpg *
         skins/Roman\ Gods/1280x800/nothing_on.png *
         skins/Roman\ Gods/1280x800/steam_on.png *
-        skins/Roman\ Gods/1280x800/tea_on.png *    
+        skins/Roman\ Gods/1280x800/tea_on.png *
         skins/Roman\ Gods/2560x1600/espresso_on.png *
         skins/Roman\ Gods/2560x1600/icon.jpg *
         skins/Roman\ Gods/2560x1600/nothing_on.png *
         skins/Roman\ Gods/2560x1600/steam_on.png *
-        skins/Roman\ Gods/2560x1600/tea_on.png *    
+        skins/Roman\ Gods/2560x1600/tea_on.png *
 
         skins/8-BIT/skin.tcl *
         skins/8-BIT/pixel.ttf *
@@ -364,13 +362,13 @@ proc make_de1_dir {srcdir destdirs} {
         skins/8-BIT/1280x800/icon.jpg *
         skins/8-BIT/1280x800/nothing_on.png *
         skins/8-BIT/1280x800/steam_on.png *
-        skins/8-BIT/1280x800/tea_on.png *    
+        skins/8-BIT/1280x800/tea_on.png *
         skins/8-BIT/2560x1600/espresso_on.png *
         skins/8-BIT/2560x1600/espresso_on_plus.png *
         skins/8-BIT/2560x1600/icon.jpg *
         skins/8-BIT/2560x1600/nothing_on.png *
         skins/8-BIT/2560x1600/steam_on.png *
-        skins/8-BIT/2560x1600/tea_on.png *    
+        skins/8-BIT/2560x1600/tea_on.png *
 
         skins/Teal\ Modern/skin.tcl *
         skins/Teal\ Modern/novocento.ttf *
@@ -378,12 +376,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Teal\ Modern/1280x800/icon.jpg *
         skins/Teal\ Modern/1280x800/nothing_on.png *
         skins/Teal\ Modern/1280x800/steam_on.png *
-        skins/Teal\ Modern/1280x800/tea_on.png *    
+        skins/Teal\ Modern/1280x800/tea_on.png *
         skins/Teal\ Modern/2560x1600/espresso_on.png *
         skins/Teal\ Modern/2560x1600/icon.jpg *
         skins/Teal\ Modern/2560x1600/nothing_on.png *
         skins/Teal\ Modern/2560x1600/steam_on.png *
-        skins/Teal\ Modern/2560x1600/tea_on.png *    
+        skins/Teal\ Modern/2560x1600/tea_on.png *
 
         skins/Green\ Cups/skin.tcl *
         skins/Green\ Cups/leaguegoth.ttf *
@@ -391,36 +389,36 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Green\ Cups/1280x800/icon.jpg *
         skins/Green\ Cups/1280x800/nothing_on.png *
         skins/Green\ Cups/1280x800/steam_on.png *
-        skins/Green\ Cups/1280x800/tea_on.png *    
+        skins/Green\ Cups/1280x800/tea_on.png *
         skins/Green\ Cups/2560x1600/espresso_on.png *
         skins/Green\ Cups/2560x1600/icon.jpg *
         skins/Green\ Cups/2560x1600/nothing_on.png *
         skins/Green\ Cups/2560x1600/steam_on.png *
-        skins/Green\ Cups/2560x1600/tea_on.png *    
+        skins/Green\ Cups/2560x1600/tea_on.png *
 
         skins/Croissant/skin.tcl *
         skins/Croissant/1280x800/espresso_on.png *
         skins/Croissant/1280x800/icon.jpg *
         skins/Croissant/1280x800/nothing_on.png *
         skins/Croissant/1280x800/steam_on.png *
-        skins/Croissant/1280x800/tea_on.png *    
+        skins/Croissant/1280x800/tea_on.png *
         skins/Croissant/2560x1600/espresso_on.png *
         skins/Croissant/2560x1600/icon.jpg *
         skins/Croissant/2560x1600/nothing_on.png *
         skins/Croissant/2560x1600/steam_on.png *
-        skins/Croissant/2560x1600/tea_on.png *    
+        skins/Croissant/2560x1600/tea_on.png *
 
         skins/Noir/skin.tcl *
         skins/Noir/1280x800/espresso_on.png *
         skins/Noir/1280x800/icon.jpg *
         skins/Noir/1280x800/nothing_on.png *
         skins/Noir/1280x800/steam_on.png *
-        skins/Noir/1280x800/tea_on.png *    
+        skins/Noir/1280x800/tea_on.png *
         skins/Noir/2560x1600/espresso_on.png *
         skins/Noir/2560x1600/icon.jpg *
         skins/Noir/2560x1600/nothing_on.png *
         skins/Noir/2560x1600/steam_on.png *
-        skins/Noir/2560x1600/tea_on.png *    
+        skins/Noir/2560x1600/tea_on.png *
 
         skins/Three\ Women/skin.tcl *
         skins/Three\ Women/painthand.ttf *
@@ -428,12 +426,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Three\ Women/1280x800/icon.jpg *
         skins/Three\ Women/1280x800/nothing_on.png *
         skins/Three\ Women/1280x800/steam_on.png *
-        skins/Three\ Women/1280x800/tea_on.png *    
+        skins/Three\ Women/1280x800/tea_on.png *
         skins/Three\ Women/2560x1600/espresso_on.png *
         skins/Three\ Women/2560x1600/icon.jpg *
         skins/Three\ Women/2560x1600/nothing_on.png *
         skins/Three\ Women/2560x1600/steam_on.png *
-        skins/Three\ Women/2560x1600/tea_on.png *    
+        skins/Three\ Women/2560x1600/tea_on.png *
 
         skins/Rodent/skin.tcl *
         skins/Rodent/Heroes\ Legend.ttf *
@@ -441,12 +439,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Rodent/1280x800/icon.jpg *
         skins/Rodent/1280x800/nothing_on.png *
         skins/Rodent/1280x800/steam_on.png *
-        skins/Rodent/1280x800/tea_on.png *    
+        skins/Rodent/1280x800/tea_on.png *
         skins/Rodent/2560x1600/espresso_on.png *
         skins/Rodent/2560x1600/icon.jpg *
         skins/Rodent/2560x1600/nothing_on.png *
         skins/Rodent/2560x1600/steam_on.png *
-        skins/Rodent/2560x1600/tea_on.png *    
+        skins/Rodent/2560x1600/tea_on.png *
 
         skins/Diner/skin.tcl *
         skins/Diner/bellerose.ttf *
@@ -454,12 +452,12 @@ proc make_de1_dir {srcdir destdirs} {
         skins/Diner/1280x800/icon.jpg *
         skins/Diner/1280x800/nothing_on.png *
         skins/Diner/1280x800/steam_on.png *
-        skins/Diner/1280x800/tea_on.png *    
+        skins/Diner/1280x800/tea_on.png *
         skins/Diner/2560x1600/espresso_on.png *
         skins/Diner/2560x1600/icon.jpg *
         skins/Diner/2560x1600/nothing_on.png *
         skins/Diner/2560x1600/steam_on.png *
-        skins/Diner/2560x1600/tea_on.png *    
+        skins/Diner/2560x1600/tea_on.png *
 
         skins/Insight/1280x800/icon.jpg *
         skins/Insight/skin.tcl *
@@ -537,7 +535,6 @@ proc make_de1_dir {srcdir destdirs} {
         skins/MimojaCafe/history_viewer.tcl *
         skins/MimojaCafe/interfaces/default_settings_screen.tcl *
         skins/MimojaCafe/interfaces/default_ui.tcl *
-        skins/MimojaCafe/interfaces/magadan_settings_screen.tcl *
         skins/MimojaCafe/interfaces/magadan_ui.tcl *
         skins/MimojaCafe/settings.tcl *
         skins/MimojaCafe/skin.tcl *
@@ -564,6 +561,302 @@ proc make_de1_dir {srcdir destdirs} {
         skins/metric/README.md *
         skins/metric/skin.tcl *
 
+        skins/DSx/1280x800/2SbuttonA.png *
+        skins/DSx/1280x800/2SbuttonE.png *
+        skins/DSx/1280x800/3SbuttonA.png *
+        skins/DSx/1280x800/3SbuttonE.png *
+        skins/DSx/1280x800/3SbuttonF.png *
+        skins/DSx/1280x800/3SbuttonS.png *
+        skins/DSx/1280x800/3SbuttonW.png *
+        skins/DSx/1280x800/admin/cleanbutton.png *
+        skins/DSx/1280x800/admin/cleanbuttonW.png *
+        skins/DSx/1280x800/admin/tabover.png *
+        skins/DSx/1280x800/background/bg1.jpg *
+        skins/DSx/1280x800/background/bg2.jpg *
+        skins/DSx/1280x800/background/bg3.jpg *
+        skins/DSx/1280x800/background/bg4.jpg *
+        skins/DSx/1280x800/background/bg5.jpg *
+        skins/DSx/1280x800/big_scale.png *
+        skins/DSx/1280x800/big_scale1.png *
+        skins/DSx/1280x800/clock_bg.png *
+        skins/DSx/1280x800/dial/bg1.png *
+        skins/DSx/1280x800/dial/bg2.png *
+        skins/DSx/1280x800/dial/bg3.png *
+        skins/DSx/1280x800/dial/bg4.png *
+        skins/DSx/1280x800/dial/bg5.png *
+        skins/DSx/1280x800/dial/cdeclb.png *
+        skins/DSx/1280x800/dial/cdede.png *
+        skins/DSx/1280x800/dial/cdedsv.png *
+        skins/DSx/1280x800/dial/cdsvclb.png *
+        skins/DSx/1280x800/dial/cdsvde.png *
+        skins/DSx/1280x800/dial/cdsvdsv.png *
+        skins/DSx/1280x800/dial/odeclb.png *
+        skins/DSx/1280x800/dial/odede.png *
+        skins/DSx/1280x800/dial/odedsv.png *
+        skins/DSx/1280x800/dial/odsvclb.png *
+        skins/DSx/1280x800/dial/odsvde.png *
+        skins/DSx/1280x800/dial/odsvdsv.png *
+        skins/DSx/1280x800/dial/rdeclb.png *
+        skins/DSx/1280x800/dial/rdede.png *
+        skins/DSx/1280x800/dial/rdedsv.png *
+        skins/DSx/1280x800/dial/rdsvclb.png *
+        skins/DSx/1280x800/dial/rdsvde.png *
+        skins/DSx/1280x800/dial/rdsvdsv.png *
+        skins/DSx/1280x800/icon.jpg *
+        skins/DSx/1280x800/icons/arrow_left.png *
+        skins/DSx/1280x800/icons/arrow_right.png *
+        skins/DSx/1280x800/icons/bean.png *
+        skins/DSx/1280x800/icons/bluecup.png *
+        skins/DSx/1280x800/icons/button4.png *
+        skins/DSx/1280x800/icons/button5.png *
+        skins/DSx/1280x800/icons/button7.png *
+        skins/DSx/1280x800/icons/button8.png *
+        skins/DSx/1280x800/icons/click.png *
+        skins/DSx/1280x800/icons/click1.png *
+        skins/DSx/1280x800/icons/click_no_box.png *
+        skins/DSx/1280x800/icons/DEespresso.png *
+        skins/DSx/1280x800/icons/DEflush.png *
+        skins/DSx/1280x800/icons/DEsteam.png *
+        skins/DSx/1280x800/icons/DEwater.png *
+        skins/DSx/1280x800/icons/espresso.png *
+        skins/DSx/1280x800/icons/flush.png *
+        skins/DSx/1280x800/icons/heart2.png *
+        skins/DSx/1280x800/icons/history.png *
+        skins/DSx/1280x800/icons/home.png *
+        skins/DSx/1280x800/icons/jug.png *
+        skins/DSx/1280x800/icons/jug_full.png *
+        skins/DSx/1280x800/icons/niche.png *
+        skins/DSx/1280x800/icons/niche1280.png *
+        skins/DSx/1280x800/icons/orangecup.png *
+        skins/DSx/1280x800/icons/people.png *
+        skins/DSx/1280x800/icons/pinkcup.png *
+        skins/DSx/1280x800/icons/power.png *
+        skins/DSx/1280x800/icons/settings.png *
+        skins/DSx/1280x800/icons/setup.png *
+        skins/DSx/1280x800/icons/shift.png *
+        skins/DSx/1280x800/icons/steam.png *
+        skins/DSx/1280x800/icons/steam_timer.png *
+        skins/DSx/1280x800/icons/stop.png *
+        skins/DSx/1280x800/icons/store.png *
+        skins/DSx/1280x800/icons/store_button.png *
+        skins/DSx/1280x800/icons/water.png *
+        skins/DSx/1280x800/icons/zoomminus.png *
+        skins/DSx/1280x800/icons/zoomplus.png *
+        skins/DSx/1280x800/icons/zoomshift.png *
+        skins/DSx/1280x800/poweroff.png *
+        skins/DSx/1280x800/SbuttonA.png *
+        skins/DSx/1280x800/SbuttonE.png *
+        skins/DSx/1280x800/SbuttonF.png *
+        skins/DSx/1280x800/SbuttonS.png *
+        skins/DSx/1280x800/SbuttonW.png *
+        skins/DSx/1920x1200/2SbuttonA.png *
+        skins/DSx/1920x1200/2SbuttonE.png *
+        skins/DSx/1920x1200/3SbuttonA.png *
+        skins/DSx/1920x1200/3SbuttonE.png *
+        skins/DSx/1920x1200/3SbuttonF.png *
+        skins/DSx/1920x1200/3SbuttonS.png *
+        skins/DSx/1920x1200/3SbuttonW.png *
+        skins/DSx/1920x1200/admin/cleanbutton.png *
+        skins/DSx/1920x1200/admin/cleanbuttonW.png *
+        skins/DSx/1920x1200/admin/tabover.png *
+        skins/DSx/1920x1200/background/bg1.jpg *
+        skins/DSx/1920x1200/background/bg2.jpg *
+        skins/DSx/1920x1200/background/bg3.jpg *
+        skins/DSx/1920x1200/background/bg4.jpg *
+        skins/DSx/1920x1200/background/bg5.jpg *
+        skins/DSx/1920x1200/big_scale.png *
+        skins/DSx/1920x1200/big_scale1.png *
+        skins/DSx/1920x1200/clock_bg.png *
+        skins/DSx/1920x1200/dial/bg1.png *
+        skins/DSx/1920x1200/dial/bg2.png *
+        skins/DSx/1920x1200/dial/bg3.png *
+        skins/DSx/1920x1200/dial/bg4.png *
+        skins/DSx/1920x1200/dial/bg5.png *
+        skins/DSx/1920x1200/dial/cdeclb.png *
+        skins/DSx/1920x1200/dial/cdede.png *
+        skins/DSx/1920x1200/dial/cdedsv.png *
+        skins/DSx/1920x1200/dial/cdsvclb.png *
+        skins/DSx/1920x1200/dial/cdsvde.png *
+        skins/DSx/1920x1200/dial/cdsvdsv.png *
+        skins/DSx/1920x1200/dial/odeclb.png *
+        skins/DSx/1920x1200/dial/odede.png *
+        skins/DSx/1920x1200/dial/odedsv.png *
+        skins/DSx/1920x1200/dial/odsvclb.png *
+        skins/DSx/1920x1200/dial/odsvde.png *
+        skins/DSx/1920x1200/dial/odsvdsv.png *
+        skins/DSx/1920x1200/dial/rdeclb.png *
+        skins/DSx/1920x1200/dial/rdede.png *
+        skins/DSx/1920x1200/dial/rdedsv.png *
+        skins/DSx/1920x1200/dial/rdsvclb.png *
+        skins/DSx/1920x1200/dial/rdsvde.png *
+        skins/DSx/1920x1200/dial/rdsvdsv.png *
+        skins/DSx/1920x1200/icon.jpg *
+        skins/DSx/1920x1200/icons/arrow_left.png *
+        skins/DSx/1920x1200/icons/arrow_right.png *
+        skins/DSx/1920x1200/icons/bean.png *
+        skins/DSx/1920x1200/icons/bluecup.png *
+        skins/DSx/1920x1200/icons/button4.png *
+        skins/DSx/1920x1200/icons/button5.png *
+        skins/DSx/1920x1200/icons/button7.png *
+        skins/DSx/1920x1200/icons/button8.png *
+        skins/DSx/1920x1200/icons/click.png *
+        skins/DSx/1920x1200/icons/click1.png *
+        skins/DSx/1920x1200/icons/click_no_box.png *
+        skins/DSx/1920x1200/icons/DEespresso.png *
+        skins/DSx/1920x1200/icons/DEflush.png *
+        skins/DSx/1920x1200/icons/DEsteam.png *
+        skins/DSx/1920x1200/icons/DEwater.png *
+        skins/DSx/1920x1200/icons/espresso.png *
+        skins/DSx/1920x1200/icons/flush.png *
+        skins/DSx/1920x1200/icons/heart2.png *
+        skins/DSx/1920x1200/icons/history.png *
+        skins/DSx/1920x1200/icons/home.png *
+        skins/DSx/1920x1200/icons/jug.png *
+        skins/DSx/1920x1200/icons/jug_full.png *
+        skins/DSx/1920x1200/icons/niche.png *
+        skins/DSx/1920x1200/icons/orangecup.png *
+        skins/DSx/1920x1200/icons/people.png *
+        skins/DSx/1920x1200/icons/pinkcup.png *
+        skins/DSx/1920x1200/icons/power.png *
+        skins/DSx/1920x1200/icons/settings.png *
+        skins/DSx/1920x1200/icons/setup.png *
+        skins/DSx/1920x1200/icons/shift.png *
+        skins/DSx/1920x1200/icons/steam.png *
+        skins/DSx/1920x1200/icons/steam_timer.png *
+        skins/DSx/1920x1200/icons/stop.png *
+        skins/DSx/1920x1200/icons/store.png *
+        skins/DSx/1920x1200/icons/store_button.png *
+        skins/DSx/1920x1200/icons/water.png *
+        skins/DSx/1920x1200/icons/zoomminus.png *
+        skins/DSx/1920x1200/icons/zoomplus.png *
+        skins/DSx/1920x1200/icons/zoomshift.png *
+        skins/DSx/1920x1200/poweroff.png *
+        skins/DSx/1920x1200/SbuttonA.png *
+        skins/DSx/1920x1200/SbuttonE.png *
+        skins/DSx/1920x1200/SbuttonF.png *
+        skins/DSx/1920x1200/SbuttonS.png *
+        skins/DSx/1920x1200/SbuttonW.png *
+        skins/DSx/2560x1600/2SbuttonA.png *
+        skins/DSx/2560x1600/2SbuttonE.png *
+        skins/DSx/2560x1600/3SbuttonA.png *
+        skins/DSx/2560x1600/3SbuttonE.png *
+        skins/DSx/2560x1600/3SbuttonF.png *
+        skins/DSx/2560x1600/3SbuttonS.png *
+        skins/DSx/2560x1600/3SbuttonW.png *
+        skins/DSx/2560x1600/admin/cleanbutton.png *
+        skins/DSx/2560x1600/admin/cleanbuttonW.png *
+        skins/DSx/2560x1600/admin/tabover.png *
+        skins/DSx/2560x1600/background/bg1.jpg *
+        skins/DSx/2560x1600/background/bg2.jpg *
+        skins/DSx/2560x1600/background/bg3.jpg *
+        skins/DSx/2560x1600/background/bg4.jpg *
+        skins/DSx/2560x1600/background/bg5.jpg *
+        skins/DSx/2560x1600/big_scale.png *
+        skins/DSx/2560x1600/big_scale1.png *
+        skins/DSx/2560x1600/clock_bg.png *
+        skins/DSx/2560x1600/dial/bg1.png *
+        skins/DSx/2560x1600/dial/bg2.png *
+        skins/DSx/2560x1600/dial/bg3.png *
+        skins/DSx/2560x1600/dial/bg4.png *
+        skins/DSx/2560x1600/dial/bg5.png *
+        skins/DSx/2560x1600/dial/cdeclb.png *
+        skins/DSx/2560x1600/dial/cdede.png *
+        skins/DSx/2560x1600/dial/cdedsv.png *
+        skins/DSx/2560x1600/dial/cdsvclb.png *
+        skins/DSx/2560x1600/dial/cdsvde.png *
+        skins/DSx/2560x1600/dial/cdsvdsv.png *
+        skins/DSx/2560x1600/dial/odeclb.png *
+        skins/DSx/2560x1600/dial/odede.png *
+        skins/DSx/2560x1600/dial/odedsv.png *
+        skins/DSx/2560x1600/dial/odsvclb.png *
+        skins/DSx/2560x1600/dial/odsvde.png *
+        skins/DSx/2560x1600/dial/odsvdsv.png *
+        skins/DSx/2560x1600/dial/rdeclb.png *
+        skins/DSx/2560x1600/dial/rdede.png *
+        skins/DSx/2560x1600/dial/rdedsv.png *
+        skins/DSx/2560x1600/dial/rdsvclb.png *
+        skins/DSx/2560x1600/dial/rdsvde.png *
+        skins/DSx/2560x1600/dial/rdsvdsv.png *
+        skins/DSx/2560x1600/icon.jpg *
+        skins/DSx/2560x1600/icons/arrow_left.png *
+        skins/DSx/2560x1600/icons/arrow_right.png *
+        skins/DSx/2560x1600/icons/bean.png *
+        skins/DSx/2560x1600/icons/bluecup.png *
+        skins/DSx/2560x1600/icons/button4.png *
+        skins/DSx/2560x1600/icons/button5.png *
+        skins/DSx/2560x1600/icons/button7.png *
+        skins/DSx/2560x1600/icons/button8.png *
+        skins/DSx/2560x1600/icons/click.png *
+        skins/DSx/2560x1600/icons/click1.png *
+        skins/DSx/2560x1600/icons/click_no_box.png *
+        skins/DSx/2560x1600/icons/DEespresso.png *
+        skins/DSx/2560x1600/icons/DEflush.png *
+        skins/DSx/2560x1600/icons/DEsteam.png *
+        skins/DSx/2560x1600/icons/DEwater.png *
+        skins/DSx/2560x1600/icons/espresso.png *
+        skins/DSx/2560x1600/icons/flush.png *
+        skins/DSx/2560x1600/icons/heart2.png *
+        skins/DSx/2560x1600/icons/history.png *
+        skins/DSx/2560x1600/icons/home.png *
+        skins/DSx/2560x1600/icons/jug.png *
+        skins/DSx/2560x1600/icons/jug_full.png *
+        skins/DSx/2560x1600/icons/niche.png *
+        skins/DSx/2560x1600/icons/orangecup.png *
+        skins/DSx/2560x1600/icons/people.png *
+        skins/DSx/2560x1600/icons/pinkcup.png *
+        skins/DSx/2560x1600/icons/power.png *
+        skins/DSx/2560x1600/icons/settings.png *
+        skins/DSx/2560x1600/icons/setup.png *
+        skins/DSx/2560x1600/icons/shift.png *
+        skins/DSx/2560x1600/icons/steam.png *
+        skins/DSx/2560x1600/icons/steam_timer.png *
+        skins/DSx/2560x1600/icons/stop.png *
+        skins/DSx/2560x1600/icons/store.png *
+        skins/DSx/2560x1600/icons/store_button.png *
+        skins/DSx/2560x1600/icons/water.png *
+        skins/DSx/2560x1600/icons/zoomminus.png *
+        skins/DSx/2560x1600/icons/zoomplus.png *
+        skins/DSx/2560x1600/icons/zoomshift.png *
+        skins/DSx/2560x1600/poweroff.png *
+        skins/DSx/2560x1600/SbuttonA.png *
+        skins/DSx/2560x1600/SbuttonE.png *
+        skins/DSx/2560x1600/SbuttonF.png *
+        skins/DSx/2560x1600/SbuttonS.png *
+        skins/DSx/2560x1600/SbuttonW.png *
+        skins/DSx/DSx_Code_Files/DSx_functions.tcl *
+        skins/DSx/DSx_Code_Files/DSx_skin.tcl *
+        skins/DSx/DSx_Font_Files/alarm\ clock.ttf *
+        skins/DSx/DSx_Font_Files/Bradley\ Hand\ Bold.ttf *
+        skins/DSx/DSx_Font_Files/Comic\ Sans\ MS.ttf *
+        skins/DSx/DSx_Font_Files/Font\ Awesome\ 5\ Brands-Regular-400.otf *
+        skins/DSx/DSx_Font_Files/Font\ Awesome\ 5\ Duotone-Solid-900.otf *
+        skins/DSx/DSx_Font_Files/Font\ Awesome\ 5\ Pro-Light-300.otf *
+        skins/DSx/DSx_Font_Files/Font\ Awesome\ 5\ Pro-Regular-400.otf *
+        skins/DSx/DSx_Font_Files/Font\ Awesome\ 5\ Pro-Solid-900.otf *
+        skins/DSx/DSx_Font_Files/GochiHand-Regular.ttf *
+        skins/DSx/DSx_Font_Files/Handlee-Regular.ttf *
+        skins/DSx/DSx_Font_Files/Helvetica.ttc *
+        skins/DSx/DSx_Font_Files/Montserrat-Regular.ttf *
+        skins/DSx/DSx_Font_Files/notosansuiregular.ttf *
+        skins/DSx/DSx_Font_Files/Roboto-Regular.ttf *
+        skins/DSx/DSx_Font_Files/Skia.ttf *
+        skins/DSx/DSx_Plugins/DSx_admin.dsx *
+        skins/DSx/DSx_Plugins/DSx_backup.dsx *
+        skins/DSx/DSx_Plugins/DSx_cal.dsx *
+        skins/DSx/DSx_Plugins/DSx_coffee.dsx *
+        skins/DSx/DSx_Plugins/DSx_plugin_UI.dsx *
+        skins/DSx/DSx_Plugins/DSx_theme.dsx *
+        skins/DSx/DSx_Plugins/DSx_workflow.dsx *
+        skins/DSx/DSx_Plugins/Pizza_dough.off *
+        skins/DSx/DSx_Plugins/wake_to_pinkcup.off *
+        skins/DSx/DSx_Plugins/DSx_flow_check.off *
+        skins/DSx/DSx_Plugins/EY_calculator.off *
+        skins/DSx/DSx_Plugins/history_delete.off *
+        skins/DSx/DSx_Plugins/move_on_button.off *
+        skins/DSx/DSx_Plugins/step_to_history.off *
+        skins/DSx/DSx_User_Set/.keep *
+        skins/DSx/skin.tcl *
+
         saver/1280x800/black_saver.jpg *
         saver/1280x800/Black\ Steel.jpg *
         saver/1280x800/Cozy-Home.jpg *
@@ -586,8 +879,8 @@ proc make_de1_dir {srcdir destdirs} {
         saver/1280x800/splotch.jpg *
         saver/1280x800/steampunk_espresso.jpg *
         saver/1280x800/steampunk_latte.jpg *
-        saver/1280x800/three_women.jpg *     
-        saver/1280x800/rainbow_dj.jpg *     
+        saver/1280x800/three_women.jpg *
+        saver/1280x800/rainbow_dj.jpg *
         saver/2560x1600/black_saver.jpg *
         saver/2560x1600/Black\ Steel.jpg *
         saver/2560x1600/Cozy-Home.jpg *
@@ -611,8 +904,8 @@ proc make_de1_dir {srcdir destdirs} {
         saver/2560x1600/splotch.jpg *
         saver/2560x1600/steampunk_espresso.jpg *
         saver/2560x1600/steampunk_latte.jpg *
-        saver/2560x1600/three_women.jpg *     
-        saver/2560x1600/rainbow_dj.jpg *     
+        saver/2560x1600/three_women.jpg *
+        saver/2560x1600/rainbow_dj.jpg *
 
         profiles/adaptive_allonge.tcl *
         profiles/flow_calibration.tcl *
@@ -634,11 +927,10 @@ proc make_de1_dir {srcdir destdirs} {
         profiles/test_temperature.tcl *
         profiles/test_pressure_calibration.tcl *
         profiles/test_temperature_calibration.tcl *
-        profiles/test_pressure_release.tcl *        
+        profiles/test_pressure_release.tcl *
         profiles/Cremina.tcl *
         profiles/manual_flow.tcl *
         profiles/manual_pressure.tcl *
-        profiles/Londinium-R-by-Damian.tcl *
         profiles/Advanced\ spring\ lever.tcl *
         profiles/Blooming\ espresso.tcl *
         profiles/cold_brew.tcl *
@@ -662,18 +954,19 @@ proc make_de1_dir {srcdir destdirs} {
         profiles/rao_allonge.tcl *
         profiles/e61\ classic\ at\ 9\ bar.tcl *
         profiles/e61\ rocketing\ up\ to\ 10\ bar.tcl *
-        profiles/e61\ with\ fast\ preinfusion\ to\ 9\ bar.tcl *      
+        profiles/e61\ with\ fast\ preinfusion\ to\ 9\ bar.tcl *
         profiles/Italian\ Australian\ espresso.tcl *
         profiles/v60-15g.tcl *
         profiles/v60-20g.tcl *
         profiles/v60-22g.tcl *
 
+        profiles/Damian's\ LM\ Leva.tcl *
+        profiles/Damian's\ LRv2.tcl *
+        profiles/Damian's\ LRv3.tcl *
+
         plugins/visualizer_upload/plugin.tcl *
 
         plugins/log_upload/plugin.tcl *
-
-        plugins/SDB/SDB.tcl *
-        plugins/SDB/plugin.tcl *
 
         plugins/DPx_Screen_Saver/plugin.tcl *
         plugins/DPx_Steam_Stop/plugin.tcl *
@@ -681,12 +974,7 @@ proc make_de1_dir {srcdir destdirs} {
         plugins/keyboard_control/plugin.tcl *
         plugins/keyboard_control/settings.tdb *
 
-        plugins/DGUI/DGUI.tcl *
-        plugins/DGUI/plugin.tcl *
-        plugins/DGUI/setup_DSx.tcl *
-        plugins/DGUI/setup_Insight.tcl *
-        plugins/DGUI/setup_MimojaCafe.tcl *
-
+        plugins/log_debug/plugin.tcl *
     }
 #        profiles/Traditional\ lever\ machine\ at\ 9\ bar.tcl *
 #        profiles/Powerful\ 10\ bar\ shot.tcl *
@@ -697,7 +985,7 @@ proc make_de1_dir {srcdir destdirs} {
     #set destdirs [list "/d/download/sync/de1plus"]
     #set destdirs [list "/d/download/sync/de1beta"]
 
-    # load the local manifest into memory 
+    # load the local manifest into memory
     foreach {filename filesize filemtime filesha} [string trim [read_file "$srcdir/complete_manifest.txt"]] {
         #puts "$filename $filecrc"
         set lmanifest_mtime($filename) $filemtime
@@ -715,7 +1003,7 @@ proc make_de1_dir {srcdir destdirs} {
 
         set manifest ""
         set files_copied 0
-        
+
         set filecnt 0
         foreach {file scope} $files {
             incr filecnt
@@ -748,20 +1036,20 @@ proc make_de1_dir {srcdir destdirs} {
             if {[file exists [file dirname $dest]] != 1} {
                 file mkdir [file dirname $dest]
             }
-        
+
             if {[file exists $source] != 1} {
                 puts "File '$source' does not exist'"
                 continue
-            } 
+            }
 
             append manifest "\"$file\" [file size $source] $mtime $sha256\n"
 
             if {[file exists $dest] == 1} {
                 if {[file mtime $source] == [file mtime $dest]} {
-                    # files are identical, do not copy      
+                    # files are identical, do not copy
                     continue
                 }
-            } 
+            }
 
             puts "$file -> $destdir/"
             file copy -force $source $dest
@@ -772,11 +1060,11 @@ proc make_de1_dir {srcdir destdirs} {
         write_file "$destdir/timestamp.txt" $timestamp
 
         #puts "Writing manifest txt to '$destdir/manifest.txt'"
-        write_file "$destdir/manifest.txt" $manifest 
+        write_file "$destdir/manifest.txt" $manifest
 
         # it might be that .txt files are modified, so try another extension name
         #puts "Writing manifest tdb to '$destdir/manifest.tdb'"
-        write_file "$destdir/manifest.tdb" $manifest 
+        write_file "$destdir/manifest.tdb" $manifest
 
         #puts "Writing manifest gz to '$destdir/manifest.gz'"
         write_binary_file "$destdir/manifest.gz" [zlib gzip $manifest]
@@ -790,7 +1078,7 @@ proc make_de1_dir {srcdir destdirs} {
 proc write_binary_file {filename data} {
     set fn [fast_write_open $filename w]
     fconfigure $fn -translation binary
-    puts $fn $data 
+    puts $fn $data
     close $fn
     return 1
 }

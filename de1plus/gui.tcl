@@ -1,8 +1,8 @@
-package provide de1_gui 1.2
+package provide de1_gui 1.3
 
 package require de1_de1 1.1
 package require de1_event 1.0
-package require de1_logging 1.0
+package require de1_logging 1.1
 package require de1_plugins 1.0
 package require de1_dui 1.0
 
@@ -33,7 +33,7 @@ proc load_skin {} {
 		catch {
 			message_page [subst {[translate "Your choice of skin had an error and cannot be used."]\n\n$err}] [translate "Ok"]
 		}
-		msg "Failed to 'load_skin' because: '$err'"
+		msg -ERROR "Failed to 'load_skin' because: '$err'"
 		after 10000 exit
 	}
 
@@ -106,7 +106,7 @@ proc photoscale {img sx {sy ""} } {
 }
 
 proc photoscale_not_android {img sx {sy ""} } {
-	msg "photoscale $img $sx $sy"
+	msg -DEBUG "photoscale $img $sx $sy"
     if { $sx == 1 && ($sy eq "" || $sy == 1) } {
         return;   # Nothing to do!
     }
@@ -126,7 +126,7 @@ proc photoscale_not_android {img sx {sy ""} } {
 
 
 proc photoscale_android {img sx {sy ""} } {
-	msg "photoscale $img $sx $sy"
+	msg -DEBUG "photoscale $img $sx $sy"
     if { $sx == 1 && ($sy eq "" || $sy == 1) } {
         return;   # Nothing to do!
     }
@@ -165,11 +165,11 @@ proc add_de1_page {names filename {skin ""} } {
 		# no redoing, as these are shipping with the app
 	} elseif {[file exists $pngfilename] != 1} {
 		set make_new_image 1
-		msg "Making new image because destination image does not exist: $pngfilename"
+		msg -DEBUG "Making new image because destination image does not exist: $pngfilename"
 	} elseif {[file mtime $srcfilename] > [file mtime $pngfilename]} {
 		# if the source image is newer than the target image, 
 		set make_new_image 1
-		msg "Making new image because date of src image is newer: $srcfilename"
+		msg -DEBUG "Making new image because date of src image is newer: $srcfilename"
 	}
 
 	if {$make_new_image == 1} {
@@ -183,7 +183,6 @@ proc add_de1_page {names filename {skin ""} } {
         set rescale_images_x_ratio [expr {$::screen_size_height / 1600.0}]
         set rescale_images_y_ratio [expr {$::screen_size_width / 2560.0}]
 
-		#msg "photoscale $names $::rescale_images_x_ratio $::rescale_images_y_ratio"
 		image create photo $names -file $srcfilename
 		photoscale $names $rescale_images_y_ratio $rescale_images_x_ratio
 		borg spinner off
@@ -193,7 +192,7 @@ proc add_de1_page {names filename {skin ""} } {
 	} else {
 		if {$::settings(preload_all_page_images) == 1} {
 			set iname [image create photo $names -file $pngfilename]
-			msg "loading page: '$names' with image '$pngfilename' with tclname: '$iname'"
+			msg -DEBUG "loading page: '$names' with image '$pngfilename' with tclname: '$iname'"
 			#image create photo $names 			$names -file $pngfilename
 		}
 	}
@@ -214,8 +213,6 @@ proc add_de1_page {names filename {skin ""} } {
 
 proc set_de1_screen_saver_directory {{dirname {}}} {
 
-	msg "set_de1_screen_saver_directory"
-
 	# force use of our default saver directory if the black screen saver is enabled, otherwise use whatever the skin chooses
 	if {$::settings(screen_saver_change_interval) == 0} {
 		set dirname "[homedir]/saver"
@@ -227,9 +224,10 @@ proc set_de1_screen_saver_directory {{dirname {}}} {
 		set saver_directory $dirname
 	}
 
+	msg -INFO "set_de1_screen_saver_directory: $::saver_directory"
+
 	#set pngfilename [random_saver_file]
 	set names "saver"
-	#puts $pngfilename
 	#image create photo $names -file $pngfilename
 	image create photo $names 
 
@@ -304,7 +302,6 @@ proc vertical_slider {varname minval maxval x y x0 y0 x1 y1} {
 	}
 
 	#set $var $finalvalue
-	#msg "vertical slider $x $y $x0 $y0  $x1 $y1 = $range = $finalvalue = $varname"
 
 	eval set $varname $finalvalue
 
@@ -336,7 +333,7 @@ proc is_fast_double_tap { key } {
 	if {$prevtime != ""} {
 		# check for a fast double-varName
 		if {[expr {$millinow - $prevtime}] < 150} {
-			msg "Fast button double-tap on $key"
+			msg -INFO "Fast button double-tap on $key"
 			set b 1
 		}
 	}
@@ -347,7 +344,6 @@ proc is_fast_double_tap { key } {
 
 proc vertical_clicker {bigincrement smallincrement varname minval maxval x y x0 y0 x1 y1 {b 0} } {
 	# b = which button was tapped
-	#msg "Var: $varname : Button $b  $x $y $x0 $y0 $x1 $y1 "
 
 	set x [translate_coordinates_finger_down_x $x]
 	set y [translate_coordinates_finger_down_y $y]
@@ -442,7 +438,7 @@ proc round_one_digits {amount} {
 
 
 proc canvas'textvar {canvas tag _var args} {
-	puts "UNUSED CURRENTLY"
+	msg -WARNING "Unexpected use of canvas'textvar"
     upvar 1 $_var var
     if { [llength $args] } {
         $canvas itemconfig $tag -text $var
@@ -455,10 +451,10 @@ proc canvas'textvar {canvas tag _var args} {
 # optional "alsobind" allows us to put text on top of a pressable button and have the text also bound to the same down/up/leave actions
 proc up_down_button_create {actionscript btn_images img_loc key_loc buttontype {alsobind {}} } {
 
-	msg "up_down_button_create"
+	msg -DEBUG "up_down_button_create"
 
 	if {$buttontype != "onetime" && $buttontype != "holdrepeats"} {
-		puts "ERROR unknown buttontype $buttontype"
+		msg -ERROR "unknown buttontype $buttontype"
 		return
 	}
 
@@ -489,7 +485,6 @@ proc up_down_button_create {actionscript btn_images img_loc key_loc buttontype {
 		.can bind $tobind <Leave> [list generic_push_button_settings $up_png $down_png $actionscript leave $buttontype]
 		lappend image_tags_created $up_png $down_png
 	}
-
 	return 
 } 
 
@@ -515,13 +510,11 @@ proc generic_push_button_settings {btnup btndown action change buttontype} {
 			if {[ifexists genericstate($btnup)] != ""} {
 				# cancel the held-button timer when they 
 				after cancel $genericstate($btnup)
-				#puts "cancelling held timer $genericstate($btnup) for $btnup"
 			}
 		}
 
 		if {$change == "leave"} {
 			if {[ifexists genericstate($btndown)] != "down"} {
-				#puts "skipping leave event because they never pressed the button down"
 				return
 			}
 
@@ -530,27 +523,23 @@ proc generic_push_button_settings {btnup btndown action change buttontype} {
 			update
 			set genericstate($btndown) "up"
 			set genericstate($btnup) ""
-			#puts "leave button $btnup"
 		} elseif {$change == "up"} {
 			# this is the up button event
 			if {$genericstate($btndown) == "up"} {
-				#puts "skipping up event because already left the button"
 				return
 			}
 
-			#puts "- $btnup : $genericstate($btndown) - $genericstate($btnup) "
 
 			.can itemconfigure $btnup -state normal
 			.can itemconfigure $btndown -state hidden
 			update
 			set genericstate($btnup) ""
-			#puts "evaling action with previous state $genericstate($btndown)"
 			if {$genericstate($btndown) != "held"} {
 				eval $action
 			}
 			set genericstate($btndown) "up"
 		} else {
-			puts "unknown action $change"
+			msg -ERROR "unknown action $change"
 		}
 	}
 }
@@ -561,7 +550,6 @@ proc generic_button_held {btnup btndown action} {
 	# button has been pressed down for a while, so activate a down/up press
 	if {$genericstate($btndown) == "held" || $genericstate($btndown) == "down"} {
 		set genericstate($btndown) "held"		
-		#puts "button $btnup held evaling function now"
 		eval $action
 		update
 		#generic_push_button_settings $btnup $btndown $action "up"
@@ -574,7 +562,7 @@ proc generic_button_held {btnup btndown action} {
 	} elseif {$genericstate($btndown) == "up"} {
 		#no longer held
 	} else {
-		puts "unknown held state: '$genericstate($btndown)'"
+		msg -ERROR "unknown held state: '$genericstate($btndown)'"
 	}
 }
 
@@ -619,7 +607,7 @@ proc install_update_app_icon {} {
 	set appurl "file://[appdir]/appupdate.tcl"
 	catch {
 		set x [borg shortcut add "Decent Update" $appurl $iconbase64_de1]
-		puts "shortcut added: '$x'"
+		msg -NOTICE "shortcut added: '$x'"
 	}
 
 }
@@ -635,10 +623,10 @@ proc install_de1_app_icon {} {
 	set iconbase64_de1 [::base64::encode -maxlen 0 $icondata_de1]
 
 	set appurl "file://[appdir]/de1.tcl"
-	puts "appurl: $appurl"
+	msg -DEBUG "appurl: $appurl"
 	catch {
 		set x [borg shortcut add "DE1" $appurl $iconbase64_de1]
-		puts "shortcut added: '$x'"
+		msg -NOTICE "shortcut added: '$x'"
 	}
 
 	#install_update_app_icon [appdir]
@@ -648,15 +636,14 @@ proc install_de1_app_icon {} {
 
 proc install_de1plus_app_icon {} {
 	package require base64
-	puts "icon file: '[appdir]/de1plus_icon_v2.png'"
+	msg -DEBUG "icon file: '[appdir]/de1plus_icon_v2.png'"
 	set icondata_de1plus [read_binary_file "[appdir]/de1plus_icon_v2.png"]
 	set iconbase64_de1plus [::base64::encode -maxlen 0 $icondata_de1plus]
 
 	set appurl "file://[appdir]/de1plus.tcl"
-	#puts "appurl: $appurl"
 	#catch {
 		set x [borg shortcut add "Decent" $appurl $iconbase64_de1plus]
-		puts "shortcut added: '$x'"
+		msg -NOTICE "shortcut added: '$x'"
 	#}
 
 	#install_update_app_icon [appdir]
@@ -674,6 +661,11 @@ proc platform_button_press {} {
 #	#return {<Motion>}
 #	return {<ButtonPress-1>}
 }
+
+proc platform_button_native_press {} {
+	return {<ButtonPress-1>}
+}
+
 
 proc platform_button_long_press {} {
 	return [dui platform button_long_press]
@@ -924,7 +916,7 @@ proc add_de1_variable {args} {
 	set varcmd [lindex [unshift args] 0]
 	set lastcmd [unshift args]
 	if {$lastcmd != "-textvariable"} {
-		msg -WARN add_de1_variable "last -command needs to be -textvariable on a add_de1_variable line. You entered: '$lastcmd'"
+		msg -WARNING "last -command needs to be -textvariable on a add_de1_variable line. You entered: '$lastcmd'"
 		return
 	}
 	
@@ -953,7 +945,6 @@ proc stop_screen_saver_timer {} {
 	if {[info exists ::screen_saver_alarm_handle] == 1} {
 		after cancel $::screen_saver_alarm_handle
 		unset -nocomplain ::screen_saver_alarm_handle
-		#msg "unset old saver alarm"
 	}
 
 }
@@ -966,8 +957,6 @@ proc delay_screen_saver {} {
 	if {$::settings(screen_saver_delay) != 0 } {
 		set ::screen_saver_alarm_handle [after [expr {60 * 1000 * $::settings(screen_saver_delay)}] "show_going_to_sleep_page"]
 	}
-
-	#msg "delay_screen_saver: [ifexists ::screen_saver_alarm_handle] [after_info]"
 }
 
 proc after_info {} {
@@ -985,7 +974,7 @@ proc show_going_to_sleep_page  {} {
 		set wake [current_alarm_time $::settings(scheduler_wake)]
 		set sleep [current_alarm_time $::settings(scheduler_sleep)]
 		if {[clock seconds] > $wake && [clock seconds] < $sleep} {
-			msg "Delaying screen saver because we are during scheduled forced-awake time"
+			msg -INFO "Delaying screen saver because we are during scheduled forced-awake time"
 			delay_screen_saver
 			return
 		}
@@ -993,26 +982,26 @@ proc show_going_to_sleep_page  {} {
 
 	if {$::de1_num_state($::de1(state)) != "Idle"} {
 		# never go to sleep if the DE1 is not idle
-		msg "delaying screen saver because de1 is not idle: '$::de1_num_state($::de1(state))'"
+		msg -INFO "delaying screen saver because de1 is not idle: '$::de1_num_state($::de1(state))'"
 		delay_screen_saver
 		return
 	}
 
     if {[ifexists ::app_updating] == 1} {
-		msg "delaying screen saver because tablet app is updating"
+		msg -INFO "delaying screen saver because tablet app is updating"
 		delay_screen_saver
 		return
 	}
 
 	if {$::de1(currently_updating_firmware) == 1 || [ifexists ::de1(in_fw_update_mode)] == 1} {
-		msg "delaying screen saver because firmware is updating"
+		msg -INFO "delaying screen saver because firmware is updating"
 		delay_screen_saver
 		return
 	}	
 
 
 
-	puts "show_going_to_sleep_page"
+	msg -INFO "show_going_to_sleep_page"
  	if {$::de1(current_context) == "sleep" || $::de1(current_context) == "saver"} {
  		return
  	}
@@ -1033,11 +1022,9 @@ proc change_screen_saver_img {} {
 
 	if {[llength [ifexists ::saver_files_cache]] == 1} {
 		# no need to change the background screen saver image if it's only 1
-		#msg "xxxxno need to change the background screen saver image if it's only 1"
 		return
 	}
 
-	#msg "change_screen_saver_img $::de1(current_context) '[page_displaying_now]'"
 	#if {$::de1(current_context) == "saver"} {
 		#catch {
 			# image delete is not needed, as Tk silently replaces the existing image if the object has the same name
@@ -1049,7 +1036,6 @@ proc change_screen_saver_img {} {
 		set err ""
 		set errcode [catch {
 			# this can happen during an upgrade
-			#msg "image create photo saver -file $fn"
 			image create photo saver -file $fn
 			
 			# BUG FIX: this was causing a new canvas item to be created each time a screen saver object was created
@@ -1205,7 +1191,7 @@ if {$::android == 0} {
 	namespace eval ::gui {
 		variable _arbitrary_t0 [expr { [clock milliseconds] / 1000.0 }]
 		variable _st_period [expr { 1.0 / ( 2.0 * 50 ) }]
-		# msg -INFO "GUI driver using 50 Hz, hard-wired, for DE1 SampleTime"
+		msg -DEBUG "GUI driver using 50 Hz, hard-wired, for DE1 SampleTime"
 	}
 }
 
@@ -1460,7 +1446,6 @@ proc set_dummy_espresso_vars {} {
 }
 
 proc set_next_page {machinepage guipage} {
-	#msg "set_next_page $machinepage $guipage"
 	set key "machine:$machinepage"
 	set ::nextpage($key) $guipage
 }
@@ -1468,7 +1453,7 @@ proc set_next_page {machinepage guipage} {
 proc show_settings { {tab_to_show ""} } {
 	backup_settings; 
 
-	puts "show_settings"
+	msg -INFO "show_settings"
 
 	if {$tab_to_show == ""} {
 		page_to_show_when_off $::settings(active_settings_tab)
@@ -1714,8 +1699,6 @@ proc update_de1_explanation_chart_soon  { {context {}} } {
 }
 
 proc update_de1_explanation_chart { {context {}} } {
-	#puts "update_de1_explanation_chart"
-	#puts "update_de1_explanation_chart 1: $::settings(settings_profile_type)"
 
 	espresso_de1_explanation_chart_elapsed length 0
 	espresso_de1_explanation_chart_temperature length 0
@@ -1764,7 +1747,6 @@ proc update_de1_explanation_chart { {context {}} } {
 		return
 	}
 
-	#puts "update_de1_explanation_chart 2"
 
 	set seconds 0
 
@@ -1833,13 +1815,11 @@ proc update_de1_explanation_chart { {context {}} } {
 	set approximate_ramptime [expr {0.01 + (abs($espresso_pressure - $preinfusion_pressure) * 0.5)}]
 	set pressure_hold_time $::settings(espresso_hold_time)
 
-	#puts "approximate_ramptime: $approximate_ramptime / pressure_hold_time: $pressure_hold_time"
 	if {$approximate_ramptime > $pressure_hold_time} {
 		set espresso_pressure [expr {$pressure_hold_time * 2}]
 	}
 
 
-	#puts "pressure_hold_time: $pressure_hold_time"
 
 	set espresso_decline_time $::settings(espresso_decline_time)
 	#if {$pressure_hold_time > $approximate_ramptime} {
@@ -2064,7 +2044,6 @@ proc update_de1_plus_advanced_explanation_chart { {context {}} } {
 
 		set pump [ifexists props(pump)]
 
-		#puts "$cnt [array get props]\n"
 
 		set theseconds [ifexists props(seconds)]
 		set transition [ifexists props(transition)]
@@ -2075,7 +2054,6 @@ proc update_de1_plus_advanced_explanation_chart { {context {}} } {
 		}
 
 		if {$pump == "pressure"} {
-			#puts "pressure [ifexists props(pressure)] $seconds"
 
 			if {$previous_pump == "flow"} {
 				espresso_de1_explanation_chart_pressure append [ifexists props(pressure)]
@@ -2124,7 +2102,6 @@ proc update_de1_plus_advanced_explanation_chart { {context {}} } {
 
 
 		} elseif {$pump == "flow"} {
-			#puts "flow [ifexists props(flow)] $seconds"
 
 			if {$previous_pump == "pressure"} {
 				espresso_de1_explanation_chart_flow append [ifexists props(flow)]
@@ -2184,7 +2161,7 @@ proc update_de1_plus_advanced_explanation_chart { {context {}} } {
 
 proc setup_images_for_first_page {} {
 	
-	msg "setup_images_for_first_page"
+	msg -DEBUG "setup_images_for_first_page"
 	set fn [random_splash_file]
 	image create photo splash -file $fn 
 	.can create image {0 0} -anchor nw -image splash -tag splash -state normal
@@ -2229,8 +2206,16 @@ proc ui_startup {} {
 	
 	set app_version [package version de1app]
 
-	if {$::settings(last_version) != $app_version && [ifexists ::changelog_link] != "" && [ifexists ::settings(app_updates_beta_enabled)] < 2} {
-		version_page "Version updated from $::settings(last_version) to $app_version.\n Tap here to open the changelog" [translate "Ok"]
+	if {$::settings(last_version) != $app_version  && [ifexists ::settings(app_updates_beta_enabled)] < 2} {
+		if {$::settings(espresso_count) == 0} {
+			set message "You are running Version $app_version."
+		} else {
+			set message "Version updated from $::settings(last_version) to $app_version."
+		}
+		if {[ifexists ::changelog_link] != ""} {
+			set message "$message\n Tap here to open the latest changelog"
+		}
+		version_page $message [translate "Ok"]
 		set ::settings(last_version) $app_version
 		save_settings
 	}
@@ -2243,7 +2228,13 @@ proc ui_startup {} {
 	check_if_battery_low_and_give_message
 
 	# check for app updates, some time after startup, and then every 24h thereafter
-	after 3000 scheduled_app_update_check
+	if {$::settings(do_async_update_check) == 1} {
+		# no need to delay doing a remove update check, if we're doing it async
+		after 500 scheduled_app_update_check
+	} else {
+		after 3000 scheduled_app_update_check
+	}
+
 	tcl_introspection
 
 	run_de1_app
@@ -2401,7 +2392,6 @@ proc water_level_color_check {widget} {
 		return
 	}
 
-	#puts water_level_color_check
 
 	if {[info exists ::water_level_color_check_count] != 1} {
 		set ::water_level_color_check_count  0
@@ -2422,7 +2412,6 @@ proc water_level_color_check {widget} {
 	#set start_blinking_level $::settings(waterlevel_blink_start_offset)
 	set blinkrate $::settings(waterlevel_indicator_blink_rate)
 
-	#puts "$::de1(water_level) | $start_blinking_level | $remaining_water"
 	set color [lindex $colors $::water_level_color_check_count]
 	if {$remaining_water > 7} {
 		# check the water rate infrequently if there is enough water and don't blink it
@@ -2532,7 +2521,8 @@ proc calibration_gui_init {} {
 	if {[ifexists ::settings(enable_fahrenheit)] == 1} {
 		set ::settings(enable_fahrenheit) 0
 		set ::calibration_disabled_fahrenheit 1
-		msg "Calibration disabled Fahrenheit"
+		msg -NOTICE "Calibration disabled Fahrenheit" \
+			"::settings(enable_farenheit) has been set to 0"
 	}
 
 	# set the entry fields back to normal
@@ -2593,7 +2583,6 @@ proc import_god_shots_from_common_format {} {
 
 
 	set import_files [lsort -dictionary [glob -nocomplain -tails -directory "[homedir]/godshots/import/common/" *.csv]]
-	#puts "import_files: $import_files"
 	foreach import_file $import_files {
 		set import_files_array($import_file) 1
 	}
@@ -2605,7 +2594,6 @@ proc import_god_shots_from_common_format {} {
 	}
 
 	set files_to_import [array names import_files_array]
-	#puts "files_to_import: $files_to_import"
 	if {$files_to_import != ""} {
 		foreach file_to_import $files_to_import {
 			set fn_import "[homedir]/godshots/import/common/$file_to_import"
@@ -2613,7 +2601,7 @@ proc import_god_shots_from_common_format {} {
 			if {[file exist $fn_export] == 1} {
 				continue
 			}
-			puts "Importing common file format into god shot from '$fn_import' to '$fn_export'"
+			msg -INFO "Importing common file format into god shot from '$fn_import' to '$fn_export'"
 
 			set import_espresso_elapsed {}
 			set import_espresso_pressure {}
@@ -2635,7 +2623,7 @@ proc import_god_shots_from_common_format {} {
 				incr linecnt
 				if {$linecnt == 1} {
 					set labels [split $line ,]
-					puts "labels: '[join $labels |]'"
+					msg -DEBUG "labels: '[join $labels |]'"
 					continue
 				}
 
@@ -2643,7 +2631,6 @@ proc import_god_shots_from_common_format {} {
 				if {[lindex $parts 0] == "meta"} {
 					set metatype [string trim [lindex $parts 9]]
 					set metadata [string trim [lindex $parts 10]]
-					#puts "metadata: '$metadata' / metatype: '$metatype'"
 					if {[string tolower $metatype] == "date"} {
 					 	set meta(clock) [iso8601stringparse $metadata]
 					} else {
@@ -2662,7 +2649,6 @@ proc import_god_shots_from_common_format {} {
 						set momentarray($labelname) $part
 					}
 
-					#puts [array get momentarray]
 
 					if {[ifexists momentarray(elapsed)] != ""} {
 						lappend import_espresso_elapsed [ifexists momentarray(elapsed)]
@@ -2678,7 +2664,7 @@ proc import_god_shots_from_common_format {} {
 
 			# we have no gravimetric flow data, but we have weight data, then remake the gravimetric flow rate list
 			if {[lsort -unique [ifexists import_espresso_flow]] == 0} {
-				puts "we have no gravimetric flow data, but we have weight data, so remaking the gravimetric flow rate list using incremental weight data"
+				msg -DEBUG "we have no gravimetric flow data, but we have weight data, so remaking the gravimetric flow rate list using incremental weight data"
 				set import_espresso_flow {}
 				set previous_weight 0
 				set previous_time 0
@@ -2704,7 +2690,6 @@ proc import_god_shots_from_common_format {} {
 						set diff_weight_per_second 0
 					}
 
-					#puts "cnt $cnt: $this_time $this_weight = $diff_weight_per_second"
 					set multiplier2 [expr {1 - $multiplier1}];
 					set smoothed_flow_rate [expr {($smoothed_flow_rate * $multiplier1) + ($diff_weight_per_second * $multiplier2)}]
 
@@ -2730,20 +2715,14 @@ espresso_notes [list [join $notes_list { - }]]
 }]
 
 			write_file $fn_export $exportdata
-
-			#puts [array get meta]
-			#puts ---
-		
 		}
 	}
-
 }
 
 proc god_shot_files {} {
 	import_god_shots_from_common_format
 
 	set files [lsort -dictionary [glob -nocomplain -tails -directory "[homedir]/godshots/" *.shot]]
-	#puts "skin_directories: $dirs"
 	set dd {}
 	foreach f $files {
 	    
@@ -2757,13 +2736,13 @@ proc god_shot_files {} {
 	    } else {
 	    	set fnexport "[homedir]/godshots/export/columnar/[file rootname $f].csv"
 			if {[file exists $fnexport] != 1} { 
-				puts "Exporting God Shot file from $fn to $fnexport" 
+				msg -INFO "Exporting God Shot file from $fn to $fnexport" 
 				export_csv godprops $fnexport
 			}
 
 	    	set fnexport_common "[homedir]/godshots/export/common/[file rootname $f].csv"
 			if {[file exists $fnexport_common] != 1} { 
-				puts "Exporting God Shot file from $fn to $fnexport_common" 
+				msg -INFO "Exporting God Shot file from $fn to $fnexport_common" 
 				export_csv_common_format godprops $fnexport_common
 			}
 
@@ -2773,14 +2752,12 @@ proc god_shot_files {} {
 		lappend dd $name $f 
 	}
 
-	#puts "god shots: '$dd'"
 	return $dd
 }
 
 
 
 proc fill_god_shots_listbox {} {
-	#puts "fill_skin_listbox $widget" 
 	unset -nocomplain ::god_shot_filenames
 	set widget $::globals(god_shots_widget)
 	$widget delete 0 99999
@@ -2818,13 +2795,11 @@ proc save_to_god_shots {} {
 		return 
 	}
 
-	#puts "ll2: '[llength [espresso_pressure range 0 end]]'"
 
 	set clock [clock seconds]
 	set filename [subst {[clock format $clock -format "%Y%m%dT%H%M%S"].shot}]
 
 	set files [lsort -dictionary [glob -nocomplain -tails -directory "[homedir]/godshots/" *.shot]]
-	#puts "skin_directories: $dirs"
 	set dd {}
 	set msg [translate "Saved"]
 	set updated 0
@@ -2833,7 +2808,7 @@ proc save_to_god_shots {} {
 	    array unset -nocomplete godprops
 	    array set godprops [encoding convertfrom utf-8[read_binary_file $fn]]
 	    if {[ifexists godprops(name)] == $::settings(god_espresso_name)} {
-	    	puts "found pre-existing god shot $f with the same description"
+	    	msg -NOTICE "found pre-existing god shot $f with the same description"
 	    	set filename $f
 	    	set msg [translate "Updated"]
 	    	set updated 1
@@ -2866,7 +2841,7 @@ proc save_to_god_shots {} {
 	if {$updated != 1} {
 		fill_god_shots_listbox
 	}
-	puts "save_to_god_shots ran"
+	msg -INFO "save_to_god_shots ran"
 
 	god_shot_save
 
@@ -2895,7 +2870,6 @@ proc load_god_shot { {force 0} } {
 
 	if {$::de1(current_context) != "describe_espresso0" && $force == 0} {
 		# spurious tk call from Android
-		#puts "retruning"
 		return 
 	}
 
@@ -2904,7 +2878,6 @@ proc load_god_shot { {force 0} } {
 		return 
 	}
 	set f [ifexists ::god_shot_filenames($stepnum)]
-	#puts "god shot: $stepnum $f"
 	if {$stepnum == ""} {
 		return
 	}
@@ -2967,7 +2940,7 @@ proc profile_title {} {
 # Using the CTRL modifier key with the desired key can bypass this issue.
 
 proc handle_keypress {keycode} {
-	msg "Keypress detected: $keycode / $::some_droid"
+	msg -DEBUG "Keypress detected: $keycode / $::some_droid"
 
 	if {($::some_droid != 1 && $keycode == 101) || ($::some_droid == 1 && $keycode == 8)} {
 		# e = espresso (emulate GUI button press)
@@ -3162,6 +3135,10 @@ namespace eval ::gui::callbacks {
 
 namespace eval ::gui::notify {
 
+    	# Show "normal" messages around waiting for updates in the GUI?
+
+	variable show_scale_update_watchdog_notifications False
+
 	proc scale_event {event_id args} {
 
 		switch -exact -- $event_id {
@@ -3173,12 +3150,19 @@ namespace eval ::gui::notify {
 
 			retrying_updates {
 
+			    if { $::gui::notify::show_scale_update_watchdog_notifications } {
 				borg toast "[translate {Retrying scale updates}] [join $args]"
+			    }
 			}
 
 			timeout_updates {
 
-				borg toast "[translate {TIMEOUT scale updates}] [join $args]"
+				borg toast "[translate {Check scale}]"
+			}
+
+			scale_reporting {
+
+				borg toast "[translate {Scale reporting}]"
 			}
 
 			not_connected {
@@ -3196,7 +3180,7 @@ namespace eval ::gui::notify {
 			}
 
 			record_complete {
-				set what [translate {Enjoy!}]
+				set what [translate {Shot complete}]
 				borg toast $what
 				say $what $::settings(sound_button_in)
 			}

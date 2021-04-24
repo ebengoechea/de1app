@@ -53,7 +53,7 @@ proc calc_sha {source} {
         if {$sha == 0} {
             # we are trying to solve an occasional "file busy", maybe the OS is doing something in the background
             catch {
-                msg "Pausing and then retrying to calculate SHA for $source"
+                msg -DEBUG "Pausing and then retrying to calculate SHA for $source"
             }
             after 1000
         }
@@ -62,7 +62,7 @@ proc calc_sha {source} {
 
     if {$sha == 0} {
         catch {
-            msg "Unable to calculate SHA for $source"
+            msg -ERROR "Unable to calculate SHA for $source"
         }
     }
 
@@ -105,7 +105,7 @@ proc fast_write_open {fn parms} {
 
     if {$errcode != 0} {
         catch {
-            msg "fast_write_open $::errorInfo"
+            msg -ERROR "fast_write_open $::errorInfo"
         }
     }
 
@@ -124,7 +124,7 @@ proc write_file {filename data} {
 
     if {$errcode != 0} {
         catch {
-            msg "write_file '$filename' $::errorInfo"
+            msg -ERROR "write_file '$filename' $::errorInfo"
         }
     }
 
@@ -169,12 +169,51 @@ proc sleep {time} {
     vwait end
 }
 
+proc httpHandlerCallback {token} {
+
+    upvar #0 $token state
+
+	set cmd [ifexists ::asyc_handlers($token)]
+	unset -nocomplain ::asyc_handlers($token)
+
+    set body [::http::data $token]
+
+    if {[::http::error $token] != ""} {
+		msg -ERROR "http_get error: [::http::error $token]"
+    }
+    if {$token != ""} {
+        ::http::cleanup $token
+    }
+
+    # run the handler that was defined for this async http request
+    $cmd $body
+}
+
+proc decent_async_http_get {url cmd {timeout 30000}} {
+    set body {}
+    set token {}    
+    ::http::config -useragent "mer454"
+    set errcode [catch {
+        set token [::http::geturl $url -binary 1 -timeout $timeout -command httpHandlerCallback]
+    }]
+
+    if {$errcode != 0} {
+        catch {
+            msg -ERROR "decent_async_http_get $::errorInfo"
+        }
+    } else {
+
+        if {$token != ""} {
+            set ::asyc_handlers($token) $cmd
+        }
+    }
+    return $token
+}
 
 proc decent_http_get {url {timeout 30000}} {
 
     set body {}
     set token {}    
-    #puts "url: $url"
     #catch {
         ::http::config -useragent "mer454"
         set token [::http::geturl $url -binary 1 -timeout $timeout]
@@ -188,10 +227,9 @@ proc decent_http_get {url {timeout 30000}} {
             set token [::http::geturl $url -binary 1 -timeout $timeout]
             set body [::http::data $token]
         }
-        #puts "body: $body"
         
         if {[::http::error $token] != ""} {
-            debug_puts "http_get error: [::http::error $token]"
+		msg -ERROR "http_get error: [::http::error $token]"
         }
         if {$token != ""} {
             ::http::cleanup $token
@@ -218,7 +256,7 @@ proc decent_http_get_to_file {url fn {timeout 30000}} {
     #set body [::http::data $token]
 
     if {[::http::error $token] != ""} {
-        debug_puts "http_get error: [::http::error $token]"
+        msg -ERROR "http_get error: [::http::error $token]"
     }
     if {$token != ""} {
         ::http::cleanup $token
@@ -240,15 +278,14 @@ proc read_file {filename} {
     }]
 
     if {$errcode != 0} {
-        puts "read_file $::errorInfo"
         catch {
-            msg "read_file $::errorInfo"
+            msg -ERROR "read_file $::errorInfo"
         }
     }
 
     if {$data == ""} {
         catch {
-            msg "read_file: '$filename' exists [file exists $filename] - length [file size $filename]"
+            msg -DEBUG "read_file: '$filename' exists [file exists $filename] - length [file size $filename]"
         }
 
     }
@@ -294,23 +331,17 @@ proc verify_decent_tls_certificate {} {
     return $status
 }
 
-proc close_log_file {} {
-    if {[ifexists ::logfile_handle] != ""} {
-        catch {
-            puts $::logfile_handle "$::debugcnt. ([clock format [clock seconds] -format "%Y-%m-%d %H:%M:%S" ]) closing log file"
-            close $::logfile_handle
-            undef -nocomplain ::logfile_handle
-        }
-    }
-}
-
 # every day, check to see if an app update is available
 proc scheduled_app_update_check {} {
-    check_timestamp_for_app_update_available
+	if {$::settings(do_async_update_check) == 1} {
+		check_timestamp_for_app_update_available_async
+	} else {
+    	check_timestamp_for_app_update_available
+	}
     after 8640000 scheduled_app_update_check 
 }
 
-proc check_timestamp_for_app_update_available { {check_only 0} } {
+proc check_timestamp_for_app_update_available_async { {check_only 0} } {
 
     set host "http://decentespresso.com"
     set progname "de1plus"
@@ -319,7 +350,8 @@ proc check_timestamp_for_app_update_available { {check_only 0} } {
     } elseif {[ifexists ::settings(app_updates_beta_enabled)] == 2} {
         set progname "de1nightly"
     }
-    puts "update timestanp endpoint: '$progname'"
+    msg -NOTICE "checking for updates"
+    msg -INFO "update timestanp endpoint: '$progname'"
 
     set url_timestamp "$host/download/sync/$progname/timestamp.txt"    
 
@@ -329,18 +361,23 @@ proc check_timestamp_for_app_update_available { {check_only 0} } {
     
 
     catch {
-        msg "Fetching remote update timestamp: '$url_timestamp'"
+        msg -DEBUG "Fetching remote update timestamp: '$url_timestamp'"
     }
 
-    catch {
-        set remote_timestamp [string trim [decent_http_get $url_timestamp]]
-    }
-    #puts "timestamp: '$remote_timestamp'"
+	decent_async_http_get $url_timestamp "check_timestamp_for_app_update_available_async_part2"
+
+}
+
+proc check_timestamp_for_app_update_available_async_part2 { remote_timestamp_in {check_only 0} } {
+
+	set remote_timestamp [string trim $remote_timestamp_in]
+    msg -INFO "Remote timestamp: '$remote_timestamp'"
 
     set local_timestamp [string trim [read_file "[homedir]/timestamp.txt"]]
+    msg -INFO "Local timestamp: '$local_timestamp'"
+
     if {$remote_timestamp == ""} {
-        puts "unable to fetch remote timestamp"
-        log_to_debug_file "unable to fetch remote timestamp"
+        msg -WARNING "unable to fetch remote timestamp"
 
         if {$check_only != 1} {
             set ::de1(app_update_button_label) [translate "Update"];             
@@ -353,19 +390,77 @@ proc check_timestamp_for_app_update_available { {check_only 0} } {
             set ::de1(app_update_button_label) [translate "Up to date"];             
         }
 
-        puts "Local timestamp is the same as remote timestamp, so no need to update"
-        log_to_debug_file "Local timestamp is the same as remote timestamp, so no need to update"
-        return 0
-        
-        # we can return at this point, if we're very confident that the sync is correct
-        # john 4/18/18 we want to check all files anyway, to fill in any missing local files, so we are going to ignore the time stamps being equal
-        #set ::de1(app_update_button_label) [translate "Up to date"]; 
-        #set ::app_updating 0
-        #return
+        msg -DEBUG "Local timestamp is the same as remote timestamp, so no need to update"
+        return $local_timestamp
     }
 
     catch {
-        msg "app update available"
+        msg -NOTICE "app update available"
+    }
+
+    set ::app_update_available 1
+
+    if {$check_only != 1} {
+        set ::de1(app_update_button_label) [translate "Update available"];     
+    }
+    # time stamps don't match, so update is useful
+    return $remote_timestamp
+
+
+}
+
+
+proc check_timestamp_for_app_update_available { {check_only 0} } {
+
+    set host "http://decentespresso.com"
+    set progname "de1plus"
+    if {[ifexists ::settings(app_updates_beta_enabled)] == 1} {
+        set progname "de1beta"
+    } elseif {[ifexists ::settings(app_updates_beta_enabled)] == 2} {
+        set progname "de1nightly"
+    }
+    msg -NOTICE "checking for updates"
+    msg -INFO "update timestanp endpoint: '$progname'"
+
+    set url_timestamp "$host/download/sync/$progname/timestamp.txt"    
+
+    set remote_timestamp {}
+
+    set ::app_update_available 0
+    
+
+    catch {
+        msg -DEBUG "Fetching remote update timestamp: '$url_timestamp'"
+    }
+
+    catch {
+        set remote_timestamp [string trim [decent_http_get $url_timestamp]]
+    }
+    msg -INFO "Remote timestamp: '$remote_timestamp'"
+
+    set local_timestamp [string trim [read_file "[homedir]/timestamp.txt"]]
+    msg -INFO "Local timestamp: '$local_timestamp'"
+
+    if {$remote_timestamp == ""} {
+        msg -WARNING "unable to fetch remote timestamp"
+
+        if {$check_only != 1} {
+            set ::de1(app_update_button_label) [translate "Update"];             
+        }
+
+        return -1
+    } elseif {$local_timestamp == $remote_timestamp} {
+
+        if {$check_only != 1} {
+            set ::de1(app_update_button_label) [translate "Up to date"];             
+        }
+
+        msg -DEBUG "Local timestamp is the same as remote timestamp, so no need to update"
+        return $local_timestamp
+    }
+
+    catch {
+        msg -NOTICE "app update available"
     }
 
     set ::app_update_available 1
@@ -383,7 +478,7 @@ proc start_app_update {} {
 
     if {[ifexists ::app_updating] == 1} {
         catch {
-            msg "App is already updating, not going to run two processes"
+            msg -INFO "App is already updating, not going to run two processes"
         }
     }
 
@@ -405,11 +500,9 @@ proc start_app_update {} {
 
     set cert_check [verify_decent_tls_certificate]
     if {$cert_check != 1} {
-        puts "https certification is not what we expect, update failed"
-        log_to_debug_file "https certification is not what we expect, update failed"
+        msg -ERROR "https certification is not what we expect, update failed"
         foreach {k v} $cert_check {
-            puts "$k : '$v'"
-            log_to_debug_file "$k : '$v'"
+            msg -DEBUG "$k : '$v'"
         }
         set ::de1(app_update_button_label) [translate "Internet encryption problem"]; 
         set ::app_updating 0
@@ -439,9 +532,14 @@ proc start_app_update {} {
         set progname "de1nightly"
     }
 
-    puts "update download endpoint: '$progname'"
+    msg -DEBUG "update download endpoint: '$progname'"
     
     set remote_timestamp [check_timestamp_for_app_update_available 1]
+    if {$remote_timestamp < 0} {
+        msg -ERROR "Could not fetch remote timestamp. Aborting update"
+        set ::app_updating 0
+        return -1
+    }
 
     ##############################################################################################################
     # get manifest both as raw TXT and as gzip compressed, to detect tampering 
@@ -461,7 +559,7 @@ proc start_app_update {} {
     }
 
     catch {
-        msg "Length of gunzip remote manifest: $remote_manifest_gunzip_length % $remote_manifest_gunzip_parts_length"
+        msg -DEBUG "Length of gunzip remote manifest: $remote_manifest_gunzip_length % $remote_manifest_gunzip_parts_length"
     }
 
     # test the remote manifest file to see that it is unmodiied and uncorrupted
@@ -470,7 +568,7 @@ proc start_app_update {} {
     }]
     if {$errcode != 0 || $remote_manifest == "" || $remote_manifest_gunzip_parts_length != 0} {
         catch {
-            msg "Corrupt manifest: '[string range $remote_manifest 0 500]'"
+            msg -ERROR "Corrupt manifest: '[string range $remote_manifest 0 500]'"
         }
         set ::de1(app_update_button_label) [translate "Update failed"]; 
 
@@ -487,14 +585,14 @@ proc start_app_update {} {
     set local_manifest [string trim [read_binary_file "[homedir]/manifest.txt"]]
 
     catch {
-        msg "Local [homedir]/manifest.txt has [string length $local_manifest] bytes - [file exists "[homedir]/manifest.txt"]"
+        msg -DEBUG "Local [homedir]/manifest.txt has [string length $local_manifest] bytes - [file exists "[homedir]/manifest.txt"]"
     }
 
     if {[string length $local_manifest] == 0} {
         set local_manifest [string trim [read_binary_file "[homedir]/manifest.tdb"]]
 
         catch {
-            msg "Now using manifest.tdb file.  Local [homedir]/manifest.tdb has [string length $local_manifest] bytes"
+            msg -DEBUG "Now using manifest.tdb file.  Local [homedir]/manifest.tdb has [string length $local_manifest] bytes"
         }
 
     }
@@ -509,10 +607,8 @@ proc start_app_update {} {
         if {[file exists "[homedir]/$filename"] != 1} {
             # force retrieval of any locally missing file by setting its SHA to zero
             catch {
-                msg "Missing: $filename"
+                msg -ERROR "Missing: $filename"
             }
-
-            log_to_debug_file "Missing: $filename"
             set filesha 0
         }
         set lmanifest($filename) [list filesize $filesize filemtime $filemtime filesha $filesha]
@@ -526,15 +622,13 @@ proc start_app_update {} {
         if {[info exists data(filesha)] != 1} {
             set tofetch($filename) [list filesize $filesize filemtime $filemtime filesha $filesha]
             catch {
-                msg "Local file is missing in local manifest: $filename"
+                msg -NOTICE "Local file is missing in local manifest: $filename"
             }
-            log_to_debug_file "Local file is missing in local manifest: $filename"
         } elseif {$data(filesha) != $filesha} {
             # if the SHA doesn't match then we'll want to fetch this file
             # john 4/18/18 note that we no longer use FILESIZE to compare files, because it can vary between file systems, even if the contents are identical
             set tofetch($filename) [list filesize $filesize filemtime $filemtime filesha $filesha]
-            puts "SHA256 mismatch local:'[ifexists data(filesha)]' != remote:'$filesha' : will fetch: $filename or filesize [ifexists data(filesize)] != $filesize"
-            log_to_debug_file "SHA256 mismatch local:'[ifexists data(filesha)]' != remote:'$filesha' : will fetch: $filename or filesize [ifexists data(filesize)] != $filesize"
+            msg -DEBUG "SHA256 mismatch local:'[ifexists data(filesha)]' != remote:'$filesha' : will fetch: $filename or filesize [ifexists data(filesize)] != $filesize"
         } else {
         }
     }
@@ -576,16 +670,14 @@ proc start_app_update {} {
 
         set newsha [calc_sha $fn]
         if {$arr(filesha) != $newsha} {
-            puts "Failed to accurately download $k"
-            log_to_debug_file "Failed to accurately download $k"
+            msg -ERROR "Failed to accurately download $k"
             set ::app_updating 0
             return -1
         }
 
         update
 
-        puts "Successfully fetched $k -> $fn ($url)"
-        log_to_debug_file "Successfully fetched $k -> $fn ($url)"
+        msg -INFO "Successfully fetched $k -> $fn ($url)"
         #break
     }
 
@@ -608,12 +700,10 @@ proc start_app_update {} {
         if {[file exists $fn] == 1} {
             set dirname [file dirname $dest]
             if {[file exists $dirname] != 1} {
-                puts "Making non-existing directory: '$dirname'"
-                log_to_debug_file "Making non-existing directory: '$dirname'"
+                msg -DEBUG "Making non-existing directory: '$dirname'"
                 file mkdir -force $dirname
             }
-            puts "Moving $fn -> $dest"
-            log_to_debug_file "Moving $fn -> $dest"
+            msg -DEBUG "Moving $fn -> $dest"
             #file rename -force $fn $dest
 
             # john 2-16-19 we copy instead of rename in case two files have an identical SHA (ie, identical content)
@@ -628,8 +718,7 @@ proc start_app_update {} {
             }
 
         } else {
-            puts "WARNING: unable to find file $fn to copy to destination: '$dest' - a partial app update has occured."
-            log_to_debug_file "WARNING: unable to find file $fn to copy to destination: '$dest' - a partial app update has occured."
+            msg -WARNING "unable to find file $fn to copy to destination: '$dest' - a partial app update has occured."
             set success 0
         }
     }
@@ -657,10 +746,8 @@ proc start_app_update {} {
             if {$this_resolution != "2560x1600" && $this_resolution != "1280x800"} {
                 set saver_directory "[homedir]/saver/${::screen_size_width}x${::screen_size_height}"
                 set splash_directory [glob -nocomplain "[splash_directory]/${::screen_size_width}x${::screen_size_height}"]
-                puts "deleting $saver_directory"
-                puts "deleting $splash_directory"
-                log_to_debug_file "deleting $saver_directory"
-                log_to_debug_file "deleting $splash_directory"
+                msg -DEBUG "deleting $saver_directory"
+                msg -DEBUG "deleting $splash_directory"
 
                 catch {
                     file delete -force $saver_directory
@@ -672,15 +759,13 @@ proc start_app_update {} {
                 set skindirs [lsort -dictionary [glob -nocomplain -tails -directory "[homedir]/skins/" *]]
                 foreach d $skindirs {
                     set thisskindir "[homedir]/skins/$d/$this_resolution/"
-                    puts "testing '$d' - '$thisskindir'"
-                    log_to_debug_file "testing '$d' - '$thisskindir'"
+                    msg -DEBUG "testing '$d' - '$thisskindir'"
                     if {[file exists $thisskindir] == 1} {
                         # skins are converted to this apps resolution only as needed, so only delete the existing dirs
                         catch {
                             file delete -force $thisskindir
                         }
-                        puts "deleting $thisskindir"
-                        log_to_debug_file "deleting $thisskindir"
+                        msg -DEBUG "deleting $thisskindir"
                     }
                 }
             }
@@ -691,8 +776,7 @@ proc start_app_update {} {
         # ok, all done.
         write_file "[homedir]/timestamp.txt" $remote_timestamp
         write_file "[homedir]/manifest.txt" $remote_manifest
-        puts "successful update"
-        log_to_debug_file "successful update"
+        msg -NOTICE "successful update"
         unset -nocomplain ::de1(firmware_crc) 
 
         if {$files_moved > 0} {
@@ -715,8 +799,7 @@ proc start_app_update {} {
         return 1
     } else {
         set ::de1(app_update_button_label) [translate "Update failed"]; 
-        puts "failed update"
-        log_to_debug_file "failed update"
+        msg -ERROR "failed update"
         set ::app_updating 0
 
 
@@ -736,7 +819,7 @@ proc read_binary_file {filename} {
     set err {}
     set error [catch {set fn [open $filename]} err]
     if {$fn == ""} {
-        msg "error opening binary file: $filename / '$err' / '$error' / $fn"
+        msg -ERROR "error opening binary file: $filename / '$err' / '$error' / $fn"
         return ""
     }
     if {$fn == ""} {
@@ -763,7 +846,6 @@ proc save_array_to_file {arrname fn} {
 
 proc settings_filename {} {
     set fn "[homedir]/settings.tdb"
-    #puts "sc: '$fn'"
     return $fn
 }
 

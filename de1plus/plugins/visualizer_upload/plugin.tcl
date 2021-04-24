@@ -12,7 +12,7 @@ namespace eval ::plugins::${plugin_name} {
     variable name "Upload to visualizer"
 
     # Paint settings screen
-    proc preload {} {
+    proc create_ui {} {
         set needs_save_settings 0
 
         # Create settings if non-existant
@@ -78,7 +78,7 @@ namespace eval ::plugins::${plugin_name} {
 
         # Last upload shot
         add_de1_text $page_name 1450 480 -text [translate "Last upload:"] -font Helv_8 -width 300 -fill "#444444" -anchor "nw" -justify "center"	
-        add_de1_variable $page_name 1450 540 -font Helv_8 -width 400 -fill "#4e85f4" -anchor "nw" -justify "left" -textvariable {[translate "Shot started on"] [clock format $::plugins::visualizer_upload::settings(last_upload_shot) -format "%Y/%m/%d %H:%M"]} 	
+        add_de1_variable $page_name 1450 540 -font Helv_8 -width 400 -fill "#4e85f4" -anchor "nw" -justify "left" -textvariable {[translate "Shot started on"] [time_format $::plugins::visualizer_upload::settings(last_upload_shot)]} 	
 
         # Last upload result
         add_de1_text $page_name 1450 660 -text [translate "Result:"] -font Helv_8 -width 300 -fill "#444444" -anchor "nw" -justify "center"
@@ -235,6 +235,7 @@ namespace eval ::plugins::${plugin_name} {
     }
     
     proc main {} {
+        plugins gui visualizer_upload [create_ui]
         ::de1::event::listener::after_flow_complete_add \
             [lambda {event_dict} {
             ::plugins::visualizer_upload::async_dispatch \

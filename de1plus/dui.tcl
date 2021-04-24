@@ -406,7 +406,7 @@ namespace eval ::dui {
 	
 		if { $settings(enable_spoken_prompts) == 1 && $message ne  "" } {
 			borg speak $message {} $settings(speaking_pitch) $settings(speaking_rate)
-		} else {
+		} elseif { $sound_name ne "" } {
 			sound make $sound_name
 		}
 	}
@@ -445,7 +445,10 @@ namespace eval ::dui {
 				#return {<<FingerUp>>}
 				return {<ButtonPress-3>}
 			}
-			return {<ButtonPress-3>}
+						
+			#return {<ButtonPress-3>}
+			# no "long press concept" on Tcl/Tk. Button-3 is the 3rd mouse button, which is a very different concept, so just accept a normal mouse click
+			return {<ButtonPress-1>}				
 		}
 		
 		proc finger_down {} {
